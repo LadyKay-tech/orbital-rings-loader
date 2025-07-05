@@ -1,0 +1,37 @@
+{
+  "name": "orbital-rings-loader",
+  "version": "1.0.0",
+  "description": "A modern, customizable loading animation with orbital rings",
+  "main": "dist/orbital-rings-loader.js",
+  "scripts": {
+    "build": "mkdir -p dist && cp orbital-rings-loader.js dist/",
+    "minify": "terser orbital-rings-loader.js -o dist/orbital-rings-loader.min.js -c -m"
+  },
+  "keywords": [
+    "loader",
+    "loading",
+    "animation",
+    "orbital",
+    "rings",
+    "progress",
+    "spinner",
+    "ui",
+    "component",
+    "vanilla-js"
+  ],
+  "author": "Karen Edegware",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ladykay-tech/orbital-rings-loader.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ladykay-tech/orbital-rings-loader/issues"
+  },
+  "homepage": "https://github.com/ladykay-tech/orbital-rings-loader#readme",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ]
+}

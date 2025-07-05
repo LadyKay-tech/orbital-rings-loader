@@ -1,0 +1,165 @@
+<!-- 
+Orbital Rings Loader
+A modern, customizable loading animation
+
+Fork this pen and customize:
+- colors: Array of hex colors for gradient
+- ringCount: Number of rings (2-5 recommended)
+- size: Size in pixels
+- blur: Enable/disable blur effect
+- showProgress: Show percentage counter
+-->
+
+<div id="loader-container"></div>
+
+<style>
+body {
+    margin: 0;
+    background: #000;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes orbit {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes orbit-reverse {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+}
+
+.orbital-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.orbital-ring::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 20px currentColor;
+}
+</style>
+
+<script>
+class OrbitalRingsLoader {
+    constructor(options = {}) {
+        this.config = {
+            container: options.container || document.body,
+            size: options.size || 200,
+            ringCount: options.ringCount || 3,
+            colors: options.colors || ['#0066FF', '#00CCFF', '#00FFCC'],
+            speed: options.speed || 1,
+            blur: options.blur !== false,
+            progress: options.progress || 0,
+            showProgress: options.showProgress || false
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        this.element = document.createElement('div');
+        this.element.style.cssText = `
+            position: relative;
+            width: ${this.config.size}px;
+            height: ${this.config.size}px;
+        `;
+        
+        this.rings = [];
+        for (let i = 0; i < this.config.ringCount; i++) {
+            const ring = this.createRing(i);
+            this.element.appendChild(ring);
+            this.rings.push(ring);
+        }
+        
+        if (this.config.showProgress) {
+            this.progressEl = document.createElement('div');
+            this.progressEl.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-family: -apple-system, Arial;
+                font-size: 24px;
+                font-weight: 600;
+                color: white;
+                letter-spacing: -0.5px;
+            `;
+            this.updateProgress();
+            this.element.appendChild(this.progressEl);
+        }
+        
+        this.config.container.appendChild(this.element);
+    }
+    
+    createRing(index) {
+        const ring = document.createElement('div');
+        ring.className = 'orbital-ring';
+        
+        const size = this.config.size * (0.4 + (index / this.config.ringCount) * 0.6);
+        const duration = 3 + index * 1.5;
+        const color = this.config.colors[index % this.config.colors.length];
+        const opacity = 0.3 + (index / this.config.ringCount) * 0.7;
+        
+        ring.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -${size/2}px;
+            margin-top: -${size/2}px;
+            border-color: ${color};
+            opacity: ${opacity};
+            animation: ${index % 2 === 0 ? 'orbit' : 'orbit-reverse'} ${duration / this.config.speed}s linear infinite;
+            ${this.config.blur ? `filter: blur(${index === 0 ? 1 : 0}px);` : ''}
+        `;
+        
+        ring.style.borderImage = `linear-gradient(90deg, ${color} 0%, transparent 50%, ${color} 100%) 1`;
+        
+        return ring;
+    }
+    
+    updateProgress() {
+        if (this.progressEl) {
+            this.progressEl.textContent = Math.floor(this.config.progress) + '%';
+        }
+    }
+    
+    setProgress(progress) {
+        this.config.progress = Math.max(0, Math.min(100, progress));
+        this.updateProgress();
+    }
+}
+
+// Create your loader - customize these options!
+const loader = new OrbitalRingsLoader({
+    container: document.getElementById('loader-container'),
+    size: 250,
+    ringCount: 4,
+    colors: ['#0066FF', '#00CCFF', '#00FFCC', '#00FFE6'],
+    blur: true,
+    showProgress: true
+});
+
+// Animate progress for demo
+let progress = 0;
+setInterval(() => {
+    progress = (progress + 2) % 101;
+    loader.setProgress(progress);
+}, 100);
+</script>

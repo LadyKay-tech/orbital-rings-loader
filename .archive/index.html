@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional Constellations</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #000;
+            cursor: none;
+        }
+        
+        #canvas {
+            display: block;
+        }
+        
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            transition: border-color 0.3s ease, scale 0.3s ease;
+            mix-blend-mode: difference;
+            left: 0;
+            top: 0;
+            will-change: transform;
+        }
+        
+        #info {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            pointer-events: none;
+            z-index: 100;
+            text-align: center;
+        }
+        
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div id="cursor"></div>
+    <div id="info">
+        Move • Click • Feel
+    </div>
+    <div id="loading">Gathering emotions...</div>
+    <script src="app.js"></script>
+</body>
+</html>

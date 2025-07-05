@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbital Rings Loader - Live Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, Arial;
+        }
+        
+        #demo-container {
+            position: relative;
+        }
+        
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .watermark:hover {
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div id="demo-container"></div>
+    <a href="https://github.com/yourusername/orbital-rings" class="watermark" target="_blank">Get the code →</a>
+    
+    <script src="orbital-rings-loader.js"></script>
+    <script>
+        // Auto-cycling demo
+        const configs = [
+            {
+                colors: ['#0066FF', '#00CCFF', '#00FFCC'],
+                ringCount: 3,
+                blur: true,
+                showProgress: false
+            },
+            {
+                colors: ['#FF0066', '#FF6600', '#FFCC00'],
+                ringCount: 4,
+                blur: false,
+                showProgress: false
+            },
+            {
+                colors: ['#9D00FF', '#FF00D4', '#FF0099'],
+                ringCount: 3,
+                blur: false,
+                showProgress: true
+            },
+            {
+                colors: ['#00FFB3', '#00FF66', '#66FF00'],
+                ringCount: 5,
+                blur: true,
+                showProgress: false
+            }
+        ];
+        
+        let currentIndex = 0;
+        let currentLoader = null;
+        
+        function showNext() {
+            if (currentLoader) {
+                currentLoader.destroy();
+            }
+            
+            const config = configs[currentIndex];
+            currentLoader = new OrbitalRingsLoader({
+                container: document.getElementById('demo-container'),
+                size: 250,
+                ...config
+            });
+            
+            // If showing progress, animate it
+            if (config.showProgress) {
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                    }
+                    currentLoader.setProgress(progress);
+                }, 200);
+            }
+            
+            currentIndex = (currentIndex + 1) % configs.length;
+        }
+        
+        // Show first loader immediately
+        showNext();
+        
+        // Cycle through different styles
+        setInterval(showNext, 4000);
+    </script>
+</body>
+</html>

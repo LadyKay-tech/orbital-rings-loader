@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbital Rings Loader - Basic Example</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #000;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, Arial;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        h1 {
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+        
+        .demo-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 16px;
+        }
+        
+        button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            display: block;
+            margin-top: 40px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Orbital Rings Loader - Basic Example</h1>
+    
+    <div class="demo-container" id="loader-container"></div>
+    
+    <div class="controls">
+        <button onclick="startLoading()">Start Loading</button>
+        <button onclick="stopLoading()">Stop</button>
+    </div>
+    
+    <code>
+const loader = new OrbitalRingsLoader({<br>
+&nbsp;&nbsp;container: document.getElementById('loader-container'),<br>
+&nbsp;&nbsp;size: 150,<br>
+&nbsp;&nbsp;ringCount: 3,<br>
+&nbsp;&nbsp;colors: ['#00D4FF', '#00FFB3', '#FFFFFF'],<br>
+&nbsp;&nbsp;showProgress: true,<br>
+&nbsp;&nbsp;progress: 0<br>
+});
+    </code>
+    
+    <script src="../dist/orbital-rings-loader.js"></script>
+    <script>
+        let loader;
+        let progressInterval;
+        
+        // Initialize loader
+        function initLoader() {
+            loader = new OrbitalRingsLoader({
+                container: document.getElementById('loader-container'),
+                size: 150,
+                ringCount: 3,
+                colors: ['#00D4FF', '#00FFB3', '#FFFFFF'],
+                showProgress: true,
+                progress: 0
+            });
+        }
+        
+        // Start loading simulation
+        function startLoading() {
+            if (loader) {
+                loader.destroy();
+            }
+            
+            initLoader();
+            
+            let progress = 0;
+            progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    setTimeout(() => {
+                        loader.destroy();
+                        loader = null;
+                    }, 1000);
+                }
+                loader.setProgress(progress);
+            }, 300);
+        }
+        
+        // Stop loading
+        function stopLoading() {
+            if (progressInterval) {
+                clearInterval(progressInterval);
+            }
+            if (loader) {
+                loader.destroy();
+                loader = null;
+            }
+        }
+        
+        // Initialize on load
+        initLoader();
+    </script>
+</body>
+</html>
